@@ -1,14 +1,10 @@
 package org.example.repository;
 
-import org.example.db.Database;
 import org.example.dto.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-
-import java.sql.*;
-import java.util.LinkedList;
 import java.util.List;
 @Component
 public class BookRepository {
@@ -16,39 +12,44 @@ public class BookRepository {
     private JdbcTemplate jdbcTemplate;
 
     public Book getBookByName(String name) {
-        try {
-            Book book = new Book();
-            Connection connection = Database.getConnection();
-            PreparedStatement preparedStatement = null;
-            preparedStatement = connection.prepareStatement("select * from book where name=? and visible=true");
-            preparedStatement.setString(1, name);
-            ResultSet resultSet = preparedStatement.getResultSet();
-            while (resultSet.next()) {
-                book.setId(resultSet.getInt("id"));
-                book.setTitle(resultSet.getString("title"));
-                book.setAuthor(resultSet.getString("author"));
-                book.setAmount(resultSet.getInt("amount"));
-                return book;
-            }
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
+        String sql="select * from book where name=? and visible=true";
+
+//        try {
+//            Book book = new Book();
+//            Connection connection = Database.getConnection();
+//            PreparedStatement preparedStatement = null;
+//            preparedStatement = connection.prepareStatement("select * from book where name=? and visible=true");
+//            preparedStatement.setString(1, name);
+//            ResultSet resultSet = preparedStatement.getResultSet();
+//            while (resultSet.next()) {
+//                book.setId(resultSet.getInt("id"));
+//                book.setTitle(resultSet.getString("title"));
+//                book.setAuthor(resultSet.getString("author"));
+//                book.setAmount(resultSet.getInt("amount"));
+//                return book;
+//            }
+//            connection.close();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+        return jdbcTemplate.queryForObject(sql, new Object[]{name}, new BeanPropertyRowMapper<>(Book.class));
     }
     public void saveBook(Book book) {
-        Connection connection = Database.getConnection();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "insert into book (title, author,amount, publish_year) values (?,?,?,?)");
-            preparedStatement.setString(1, book.getTitle());
-            preparedStatement.setString(2, book.getAuthor());
-            preparedStatement.setInt(3, book.getAmount());
-            preparedStatement.setDate(4, Date.valueOf(book.getPublishYear()));
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        String sql= "insert into book (title, author,amount, publish_year) values (?,?,?,?)";
+        int n=jdbcTemplate.update(sql,book.getTitle(), book.getAuthor(), book.getAmount(), book.getPublishYear());
+        System.out.println(n);
+//        Connection connection = Database.getConnection();
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement(
+//                    "insert into book (title, author,amount, publish_year) values (?,?,?,?)");
+//            preparedStatement.setString(1, book.getTitle());
+//            preparedStatement.setString(2, book.getAuthor());
+//            preparedStatement.setInt(3, book.getAmount());
+//            preparedStatement.setDate(4, Date.valueOf(book.getPublishYear()));
+//            preparedStatement.execute();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     public List<Book> getBookList() {
@@ -78,14 +79,16 @@ public class BookRepository {
         return list;
     }
     public void deleteBook(Integer id) {
-        Connection connection = Database.getConnection();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("delete from book where id=?");
-            preparedStatement.setInt(1, id);
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        String sql="delete from book where id=?";
+        int n=jdbcTemplate.update(sql,id);
+        System.out.println(n);
+//        Connection connection = Database.getConnection();
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement("delete from book where id=?");
+//            preparedStatement.setInt(1, id);
+//            preparedStatement.execute();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
     }
-
 }

@@ -66,7 +66,7 @@ public class StudentBookRepository {
 //            e.printStackTrace();
 //            System.exit(-1);
 //        }
-        return null;
+        return list;
     }
 
     public List<Book> getStudentBookList(Integer studentId) {
