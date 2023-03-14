@@ -55,38 +55,43 @@ public class StudentRepository {
 //        }
     }
     public List<Student> getStudentList() {
-        try (Connection connection = Database.getConnection()) {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from student");
-            List<Student> studentList = new LinkedList<>();
-                Student student=null;
-            while (resultSet.next()) {
-                student = new Student();
-                student.setId(resultSet.getInt("id"));
-                student.setName(resultSet.getString("name"));
-                student.setSurname(resultSet.getString("surname"));
-                student.setPhone(resultSet.getString("phone"));
-                student.setCreatedDate(resultSet.getDate("created_date").toLocalDate());
-                student.setVisible(resultSet.getBoolean("visible"));
-
-                studentList.add(student);
-            }
-            return studentList;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        return null;
+        String sql="select * from student";
+        List<Student> list=jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Student.class));
+//        try (Connection connection = Database.getConnection()) {
+//            Statement statement = connection.createStatement();
+//            ResultSet resultSet = statement.executeQuery("select * from student");
+//            List<Student> studentList = new LinkedList<>();
+//                Student student=null;
+//            while (resultSet.next()) {
+//                student = new Student();
+//                student.setId(resultSet.getInt("id"));
+//                student.setName(resultSet.getString("name"));
+//                student.setSurname(resultSet.getString("surname"));
+//                student.setPhone(resultSet.getString("phone"));
+//                student.setCreatedDate(resultSet.getDate("created_date").toLocalDate());
+//                student.setVisible(resultSet.getBoolean("visible"));
+//
+//                studentList.add(student);
+//            }
+//            return studentList;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            System.exit(-1);
+//        }
+        return list;
     }
     public void deleteStudent(Integer id) {
-        Connection connection = Database.getConnection();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("delete from student where id=?");
-            preparedStatement.setInt(1,id);
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        String sql="delete from student where id=?";
+        int n= jdbcTemplate.update(sql, id);
+        System.out.println(n);
+//        Connection connection = Database.getConnection();
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement("delete from student where id=?");
+//            preparedStatement.setInt(1,id);
+//            preparedStatement.execute();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
     }
     public static boolean isAdmin(String number, String name, String surname) {
 //        Connection con = Database.getConnection();
@@ -107,20 +112,25 @@ public class StudentRepository {
         }
         return false;
     }
-    public static boolean isRegistered(String number, String name, String surname) {
-        Connection con = Database.getConnection();
-        try {
-            PreparedStatement preparedStatement= con.prepareStatement("select * from student where phone=? and  name=? and surname=?;");
-            preparedStatement.setString(1, number);
-            preparedStatement.setString(2, name);
-            preparedStatement.setString(3, surname);
-            ResultSet resultSet= preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public  boolean isRegistered(String number, String name, String surname) {
+        String sql="select * from student where phone=? and  name=? and surname=?;";
+        int n= jdbcTemplate.update(sql,number,name,surname);
+        if(n!=0){
+            return true;
         }
+//        Connection con = Database.getConnection();
+//        try {
+//            PreparedStatement preparedStatement= con.prepareStatement("select * from student where phone=? and  name=? and surname=?;");
+//            preparedStatement.setString(1, number);
+//            preparedStatement.setString(2, name);
+//            preparedStatement.setString(3, surname);
+//            ResultSet resultSet= preparedStatement.executeQuery();
+//            if (resultSet.next()) {
+//                return true;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         return false;
     }
 }
