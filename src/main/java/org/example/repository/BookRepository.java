@@ -2,6 +2,9 @@ package org.example.repository;
 
 import org.example.db.Database;
 import org.example.dto.Book;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -9,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 @Component
 public class BookRepository {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     public Book getBookByName(String name) {
         try {
@@ -47,28 +52,30 @@ public class BookRepository {
     }
 
     public List<Book> getBookList() {
-        try (Connection connection = Database.getConnection()) {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from book");
-            List<Book> bookList = new LinkedList<>();
-            Book book=null;
-            while (resultSet.next()) {
-                book = new Book();
-                book.setId(resultSet.getInt("id"));
-                book.setTitle(resultSet.getString("title"));
-                book.setAuthor(resultSet.getString("author"));
-                book.setAmount(resultSet.getInt("amount"));
-                book.setPublishYear(resultSet.getDate("publish_year").toLocalDate());
-                book.setVisible(resultSet.getBoolean("visible"));
-
-                bookList.add(book);
-            }
-            return bookList;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        return null;
+        String sql="select * from book";
+        List<Book> list=jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Book.class));
+//        try (Connection connection = Database.getConnection()) {
+//            Statement statement = connection.createStatement();
+//            ResultSet resultSet = statement.executeQuery("select * from book");
+//            List<Book> bookList = new LinkedList<>();
+//            Book book=null;
+//            while (resultSet.next()) {
+//                book = new Book();
+//                book.setId(resultSet.getInt("id"));
+//                book.setTitle(resultSet.getString("title"));
+//                book.setAuthor(resultSet.getString("author"));
+//                book.setAmount(resultSet.getInt("amount"));
+//                book.setPublishYear(resultSet.getDate("publish_year").toLocalDate());
+//                book.setVisible(resultSet.getBoolean("visible"));
+//
+//                bookList.add(book);
+//            }
+//            return bookList;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            System.exit(-1);
+//        }
+        return list;
     }
     public void deleteBook(Integer id) {
         Connection connection = Database.getConnection();
