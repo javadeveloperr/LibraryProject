@@ -1,13 +1,16 @@
 package org.example.service;
 
 import org.example.repository.StudentBookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class StudentBookService {
-    @Autowired
-    StudentBookRepository studentBookRepository;
+
+    private final StudentBookRepository studentBookRepository;
+
+    public StudentBookService(StudentBookRepository studentBookRepository) {
+        this.studentBookRepository = studentBookRepository;
+    }
 
     public void studentTakenBook() {
             studentBookRepository.studentTakenBooksAdmin();
@@ -15,4 +18,6 @@ public class StudentBookService {
     public void takenBooksHistory(){
         studentBookRepository.bookTakenHistory();
     }
+
+
 }

@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.dto.Book;
 import org.example.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,14 @@ import java.util.Scanner;
 public class BookController {
     @Autowired
     BookService bookService;
+
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    public BookController() {
+    }
+
     Scanner scanner=new Scanner(System.in);
     public void getBookListAdmin(){
         System.out.println("Book List");

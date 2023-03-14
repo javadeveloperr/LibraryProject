@@ -10,6 +10,11 @@ import java.util.List;
 public class BookService {
     @Autowired
     BookRepository bookRepository;
+
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
+
     public void bookList(){
         List<Book> bookList = bookRepository.getBookList();
         for (Book book : bookList) {
@@ -30,5 +35,9 @@ public class BookService {
         for (Book book : bookList) {
             System.out.println(book);
         }
+    }
+
+    public void setBookRepository(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 }

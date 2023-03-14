@@ -2,8 +2,6 @@ package org.example.repository;
 
 import org.example.db.Database;
 import org.example.dto.Book;
-import org.example.dto.Student;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
