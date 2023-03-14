@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.dto.Student;
 import org.example.repository.StudentRepository;
 import org.example.util.ScannerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,14 +9,14 @@ import org.springframework.stereotype.Component;
 @Component
 //@RequiredArgsConstructor
 public class MenuController {
-@Autowired
-      StudentRepository studentRepository;
-@Autowired
- BookController bookController;
-@Autowired
-      StudentBookController studentBookController;
-@Autowired
-  StudentController studentController;
+    @Autowired
+    StudentRepository studentRepository;
+    @Autowired
+    BookController bookController;
+    @Autowired
+    StudentBookController studentBookController;
+    @Autowired
+    StudentController studentController;
 
 //    public MenuController(StudentRepository studentRepository, BookController bookController, StudentBookController studentBookController, StudentController studentController) {
 //        this.studentRepository = studentRepository;
@@ -29,7 +30,8 @@ public class MenuController {
         return ScannerUtil.IntScanner.nextInt();
     }
 
-    public void userMenu() {
+    public void userMenu(String phone,String name,String surname) {
+        int studentId =studentController.getStudentId(phone, name, surname);
         System.out.println("1. Book List\n+" +
                 "2. Take book\n" +
                 "3. Taken books\n" +
@@ -42,9 +44,9 @@ public class MenuController {
             int action;
             action = action();
             switch (action) {
-//                case 1 -> bookController.;
-//                case 2 -> bookController.addBook();
-//                case 3 -> bookController.deleteBook();
+                case 1 -> bookController.getBookListUser();
+//                case 2 -> bookController.;
+                case 3 -> bookController.takenBooksUser(studentId);
 //                case 4 -> studentController.studentList();
 //                case 5 -> studentController.addStudent();A
 //                case 6 -> studentController.deleteStudent();
@@ -92,7 +94,7 @@ public class MenuController {
         if (studentRepository.isAdmin(phone, name, surname)) {
             adminMenu();
         } else if (studentRepository.isRegistered(phone, name, surname)) {
-            userMenu();
+            userMenu(phone, name, surname);
         } else {
             System.out.println("You may say to admin for using system");
         }

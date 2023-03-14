@@ -35,4 +35,8 @@ public class StudentController {
         Integer id= scanner.nextInt();
         studentService.deleteStudent(id);
     }
+
+    public Integer getStudentId(String phone, String name, String surname) {
+        return studentService.getStudentId(phone, name, surname);
+    }
 }

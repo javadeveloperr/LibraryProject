@@ -133,4 +133,10 @@ public class StudentRepository {
 //        }
         return false;
     }
+
+    public Integer getStudentId(String phone, String name, String surname) {
+        String sql="select id from student where phone=? and  name=? and surname=?;";
+        int n= jdbcTemplate.update(sql,phone,name,surname);
+        return n;
+    }
 }

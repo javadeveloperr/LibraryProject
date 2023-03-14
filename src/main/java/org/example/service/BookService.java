@@ -40,4 +40,11 @@ public class BookService {
     public void setBookRepository(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
+
+    public void takenBooksUser(Integer id) {
+        List<Book> bookList=bookRepository.takenBookUser(id);
+        for (Book book:bookList){
+            System.out.println(book);
+        }
+    }
 }

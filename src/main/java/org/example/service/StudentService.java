@@ -27,4 +27,8 @@ public class StudentService {
     public void deleteStudent(Integer id) {
         studentRepository.deleteStudent(id);
     }
+
+    public Integer getStudentId(String phone, String name, String surname) {
+        return studentRepository.getStudentId(phone, name, surname);
+    }
 }

@@ -91,4 +91,27 @@ public class BookRepository {
 //            throw new RuntimeException(e);
 //        }
     }
+
+    public List<Book> takenBookUser(Integer id) {
+        String sql="select title, author, publish_year from" +
+                " book where id in (select book_id from student_book where student_id=?)";
+        List<Book> list=jdbcTemplate.query(sql,new Object[]{id},new BeanPropertyRowMapper<>(Book.class));
+        return list;
+    }
+    public Integer getBookIdWithName(String title){
+        String sql="select id from book where title=?";
+        Integer id=jdbcTemplate.update(sql,Integer.class);
+        if (id==null){
+            return -1;
+        }
+        return id;
+    }
+    public boolean checkBookAvailable(Integer id){
+        String sql="select * from book where id=? and amount>=1";
+        int n=jdbcTemplate.update(sql,new Object[]{id});
+        if (n>=1){
+            return true;
+        }
+        return false;
+    }
 }

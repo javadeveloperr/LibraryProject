@@ -53,4 +53,8 @@ public class BookController {
         System.out.println("Book List");
         bookService.getBookListUser();
     }
+    public void takenBooksUser(Integer id){
+        System.out.println("Your taken books : ");
+        bookService.takenBooksUser(id);
+    }
 }
