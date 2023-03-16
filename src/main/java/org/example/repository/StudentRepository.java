@@ -1,14 +1,9 @@
 package org.example.repository;
-
-import org.example.db.Database;
 import org.example.dto.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-
-import java.sql.*;
-import java.util.LinkedList;
 import java.util.List;
 @Component
 public class StudentRepository {
@@ -133,7 +128,6 @@ public class StudentRepository {
 //        }
         return false;
     }
-
     public Integer getStudentId(String phone, String name, String surname) {
         String sql="select id from student where phone=? and  name=? and surname=?;";
         int n= jdbcTemplate.update(sql,phone,name,surname);

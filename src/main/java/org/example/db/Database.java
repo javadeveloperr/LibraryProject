@@ -16,7 +16,7 @@ public class Database {
 
     public static Connection getConnection() {
         try {
-            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/computer", "postgres", "root123");
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Asaka", "postgres", "root123");
             return con;
         } catch (SQLException e) {
             System.out.println(e.getSQLState());
@@ -37,34 +37,35 @@ public class Database {
     }
 
     public static void initTable() {
-        String book = "create table if not exists book (" +
-                "id serial primary key," +
-                "title varchar(50) unique not null," +
-                "author varchar(30) not null," +
-                "publish_year date not null," +
-                "amount int not null default 1," +
-                "visible boolean not null default true);";
+//        String book = "create table if not exists book (" +
+//                "id serial primary key," +
+//                "title varchar(50) unique not null," +
+//                "author varchar(30) not null," +
+//                "publish_year date not null," +
+//                "amount int not null default 1," +
+//                "visible boolean not null default true);";
+//
+//        String student = "create table if not exists student (" +
+//                "id serial primary key," +
+//                "name varchar(20) not null," +
+//                "surname varchar(20) not null," +
+//                "phone varchar(13) not null," +
+//                "created_date date not null default now()," +
+//                "visible boolean not null default true);";
 
-        String student = "create table if not exists student (" +
-                "id serial primary key," +
-                "name varchar(20) not null," +
-                "surname varchar(20) not null," +
-                "phone varchar(13) not null," +
-                "created_date date not null default now()," +
-                "visible boolean not null default true);";
-
-        String studentBook = "create table if not exists student_book (" +
-                "id serial primary key," +
-                "student_id integer not null," +
-                "book_id integer not null," +
-                "created_date date not null default now()," +
-                "status varchar(10) not null default 'TAKEN'," +
-                "returned_date date," +
-                "duration integer," +
-                "foreign key(student_id) references student(id)," +
+        String studentBook =
+//                "create table if not exists student_book (" +
+//                "id serial primary key," +
+//                "student_id integer not null," +
+//                "book_id integer not null," +
+//                "created_date date not null default now()," +
+//                "status varchar(10) not null default 'TAKEN'," +
+//                "returned_date date," +
+//                "duration integer," +
+                "alter table student_book add constraint st_b_fk foreign key(student_id) references student(id)," +
                 "foreign key(book_id) references book(id));";
-        execute(book);
-        execute(student);
+//        execute(book);
+//        execute(student);
         execute(studentBook);
     }
 
